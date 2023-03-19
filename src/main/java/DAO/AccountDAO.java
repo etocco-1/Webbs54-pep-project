@@ -46,6 +46,8 @@ public class AccountDAO {
             //write preparedStatement's setString method here.
             String str1_username = account.getUsername();
             String str2_password = account.getPassword();
+            account.setUsername(str1_username);
+            account.setUsername(str2_password);
 
             preparedStatement.setString(1, str1_username);
             preparedStatement.setString(2, str2_password);
@@ -57,6 +59,33 @@ public class AccountDAO {
                 int generated_account_id = (int) pkeyResultSet.getLong(1);
                 account.setAccount_id(generated_account_id);
                 return new Account(generated_account_id, str1_username, str2_password);
+            }
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public Account checkAccount(Account account){
+        Connection connection = ConnectionUtil.getConnection();
+        try {
+            //Write SQL logic here
+            String sql = "SELECT * FROM account WHERE username = ? AND password = ?;";
+            
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            //write preparedStatement's setString method here.
+            String str1_username = account.getUsername();
+            String str2_password = account.getPassword();
+
+            preparedStatement.setString(1, str1_username);
+            preparedStatement.setString(2, str2_password);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while(rs.next()){
+                account = new Account(rs.getInt("account_id"), rs.getString("username"),
+                        rs.getString("password"));
+                return account;
             }
         }catch(SQLException e){
             System.out.println(e.getMessage());

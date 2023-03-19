@@ -46,5 +46,10 @@ public class AccountService {
     public Account addAccount(Account account) {
         return accountDAO.insertAccount(account);
     }
+
+    public Account logintoAccount(Account account) {
+        return accountDAO.checkAccount(account);
+    }
+    
     
 }

@@ -88,6 +88,8 @@ public class SocialMediaController {
             ctx.json(mapper.writeValueAsString(addedAccount));
         }
     }
+    
+    
 
    
     
@@ -95,10 +97,25 @@ public class SocialMediaController {
     
     
 
-    private void postUserLogins(Context ctx)
-    {
-        
+    private void postUserLogins(Context ctx) throws JsonProcessingException
+{
+    ObjectMapper mapper = new ObjectMapper();
+    Account account = mapper.readValue(ctx.body(), Account.class);
+
+    // Add authentication logic here
+    if (account.getUsername().trim().isBlank()) {
+        ctx.status(401);
+        return;
     }
+
+    Account userAccount = accountservice.logintoAccount(account);
+    if (userAccount == null) {
+        ctx.status(401); // Return 401 if login fails
+    } else {
+        ctx.json(mapper.writeValueAsString(userAccount));
+    }
+}
+
 
     private void postNewMessages(Context ctx)
     {

@@ -34,6 +34,7 @@ public class AuthIntegrationTest {
      * for interacting locally on the web.
      * @throws InterruptedException
      */
+
     @Before
     public void setUp() throws InterruptedException {
         ConnectionUtil.resetTestDatabase();

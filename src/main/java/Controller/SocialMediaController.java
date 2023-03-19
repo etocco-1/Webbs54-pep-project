@@ -41,7 +41,7 @@ public class SocialMediaController {
         app.delete("/messages/{message_id}", this::deleteMessagebyId); // delete a message identified by a message ID
         app.patch("/messages/{message_id}", this::updateMessagebyId); // update a message text identified by a message ID
         app.get("/accounts/{account_id}/messages", this::getAllMessagesbyAccountId); // retrieve all messages written by a particular user
-        app.start(8080);
+        // app.start(8080); app is started in the test files.
 
         return app;
     }
@@ -54,18 +54,46 @@ public class SocialMediaController {
     //     context.json("sample text");
     // }
 
-    private void postUserRegistrations(Context ctx) throws JsonProcessingException
-    {
+    
+
+    private void postUserRegistrations(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Account account = mapper.readValue(ctx.body(), Account.class);
-        Account addedAccount = accountservice.addAccount(account); // will work once AccountService file is complete
-        if(addedAccount==null){
-            ctx.status(401);
-        }else{
-            ctx.json(mapper.writeValueAsString(addedAccount));
+    
+        // Check if the username is blank
+        if (account.getUsername().trim().isEmpty()) {
+            ctx.status(400);
+            ctx.result("Username cannot be blank");
+            return;
         }
 
+        // Check if the password is too short
+        if (account.getPassword().length() < 4) {
+            System.out.println("Password too short!");
+            ctx.status(400);
+            return;
+        }
+
+        // Check if the username is blank
+        if (account.getPassword().trim().isEmpty()) {
+            ctx.status(401);
+            ctx.result("Passwornd is Empty!");
+            return;
+        }
+    
+        Account addedAccount = accountservice.addAccount(account);
+        if (addedAccount == null) {
+            ctx.status(200);
+        } else {
+            ctx.json(mapper.writeValueAsString(addedAccount));
+        }
     }
+
+   
+    
+    
+    
+    
 
     private void postUserLogins(Context ctx)
     {

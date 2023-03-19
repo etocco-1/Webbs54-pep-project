@@ -36,5 +36,54 @@ public class MessageService {
     public MessageService(MessageDAO messageDAO){
         this.messageDAO = messageDAO;
     }
+
+    public Message addMessage(Message message) {
+        return messageDAO.postMessage(message);
+    }
+
+    /**
+     * TODO: Use the MessageDAO to retrieve a List containing all messages.
+     * You could use the messageDAO.getAllMessages method.
+     *
+     * @return all flights in the database.
+     */
+    public List<Message> getAllMessages() {
+        List<Message> all_messages = messageDAO.getAllMessages();
+        return all_messages;
+    }
+
+    public Message retrieveMessage(int message_id){
+        return messageDAO.getMessageById(message_id);
+    }
+
+    public Message deleteMessage(int message_id){
+        return messageDAO.deleteMessageById(message_id);
+    }
     
+    /**
+    * TODO: Use the FlightDAO to update an existing flight from the database.
+     * You should first check that the flight ID already exists. To do this, you could use an if statement that checks
+     * if flightDAO.getFlightById returns null for the flight's ID, as this would indicate that the flight id does not
+     * exist.
+     *
+     * @param flight_id the ID of the flight to be modified.
+     * @param flight an object containing all data that should replace the values contained by the existing flight_id.
+     *         the flight object does not contain a flight ID.
+     * @return the newly updated flight if the update operation was successful. Return null if the update operation was
+     *         unsuccessful. We do this to inform our application about successful/unsuccessful operations. (eg, the
+     *         user should have some insight if they attempted to edit a nonexistent flight.)
+     */
+    public Message updateMessage(int message_id, Message message){
+        if (Objects.isNull(messageDAO.getMessageById(message_id)))
+        {
+            return null;
+        }
+        messageDAO.updateMessage(message_id, message);
+        return messageDAO.getMessageById(message_id);
+    }
+
+    public List<Message> getAllMessagesbyAccount(int user_id) {
+        List<Message> all_messages = messageDAO.getAllMessagesbyUser(user_id);
+        return all_messages;
+    }
 }

@@ -40,14 +40,12 @@ public class AccountDAO {
         try {
 //          Write SQL logic here. You should only be inserting with the username and password column, so that the database may
 //          automatically generate a primary key.
-            String sql = "INSERT INTO account (account_id, username, password) VALUES (?,?);";
+            String sql = "INSERT INTO account (username, password) VALUES (?,?);";
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-            //write preparedStatement's setString method here.
+            // write preparedStatement's setString method here.
             String str1_username = account.getUsername();
             String str2_password = account.getPassword();
-            account.setUsername(str1_username);
-            account.setUsername(str2_password);
 
             preparedStatement.setString(1, str1_username);
             preparedStatement.setString(2, str2_password);
@@ -56,15 +54,17 @@ public class AccountDAO {
             preparedStatement.executeUpdate();
             ResultSet pkeyResultSet = preparedStatement.getGeneratedKeys();
             if(pkeyResultSet.next()){
-                int generated_account_id = (int) pkeyResultSet.getLong(1);
-                account.setAccount_id(generated_account_id);
-                return new Account(generated_account_id, str1_username, str2_password);
+                //int generated_account_id = (int) pkeyResultSet.getLong(1);
+                //account.setAccount_id(generated_account_id);
+                return new Account(account.getUsername(), account.getPassword());
             }
         }catch(SQLException e){
             System.out.println(e.getMessage());
         }
         return null;
     }
+
+    // checkAccount validates if there is an exisiting account with the information provided.
 
     public Account checkAccount(Account account){
         Connection connection = ConnectionUtil.getConnection();

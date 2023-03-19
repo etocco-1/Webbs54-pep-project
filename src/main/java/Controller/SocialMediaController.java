@@ -117,34 +117,101 @@ public class SocialMediaController {
 }
 
 
-    private void postNewMessages(Context ctx)
-    {
-        
+    private void postNewMessages(Context ctx) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Message message = mapper.readValue(ctx.body(), Message.class);
+        Message addedMessage = messageservice.addMessage(message);
+        if(addedMessage==null){
+            ctx.status(400);
+        }else{
+            ctx.json(mapper.writeValueAsString(addedMessage));
+        }
     }
 
-    private void getAllMessages(Context ctx)
-    {
-        
+    /**
+     * Handler to retrieve all messages. There is no need to change anything in this method.
+     * @param ctx the context object handles information HTTP requests and generates responses within Javalin. It will
+     *            be available to this method automatically thanks to the app.put method.
+     */
+    private void getAllMessages(Context ctx){
+        ctx.json(messageservice.getAllMessages());
     }
 
-    private void getMessageById(Context ctx)
-    {
-        
+    // private void getMessageById(Context ctx){
+    //     // ctx.json(messageservice.retrieveMessage(ctx.pathParam("message_id")));
+    //     ctx.json(messageservice.retrieveMessage());
+    // }
+
+    // private void getMessageById(Context ctx) throws JsonProcessingException {
+    //     ObjectMapper mapper = new ObjectMapper();
+    //     Message message = mapper.readValue(ctx.body(), Message.class);
+    //     Message message_by_id = messageservice.retrieveMessage(message);
+    //     if(message_by_id!=null){
+    //         ctx.json(mapper.writeValueAsString(message_by_id));
+    //     }else{
+    //         ctx.status(400);
+    //     }
+    // }
+
+    private void getMessageById(Context ctx) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Message message = mapper.readValue(ctx.body(), Message.class);
+        int message_id = Integer.parseInt(ctx.pathParam("message_id"));
+        Message getMessagebyId = messageservice.retrieveMessage(message_id);
+        System.out.println(getMessagebyId);
+        if(getMessagebyId == null){
+            ctx.status(400);
+        }else{
+            ctx.json(mapper.writeValueAsString(getMessagebyId));
+        }
     }
 
-    private void deleteMessagebyId(Context ctx)
-    {
+
+    // private void deleteMessagebyId(Context ctx) throws JsonProcessingException
+    // {
+    //     ObjectMapper mapper = new ObjectMapper();
+    //     Message message = mapper.readValue(ctx.body(), Message.class);
+    //     int message_id = Integer.parseInt(ctx.pathParam("message_id"));
+    //     Message delete_message_by_id = messageservice.deleteMessage(message_id);
+    //     if(delete_message_by_id!=null){
+    //         ctx.json(mapper.writeValueAsString(delete_message_by_id));
+    //     }else{
+    //         ctx.status(400);
+    //     }
         
+    // }
+
+    private void deleteMessagebyId(Context ctx) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Message message = mapper.readValue(ctx.body(), Message.class);
+        int message_id = Integer.parseInt(ctx.pathParam("message_id"));
+        Message delete_message_by_id = messageservice.deleteMessage(message_id);
+        System.out.println(delete_message_by_id);
+        if(delete_message_by_id == null){
+            ctx.status(400);
+        }else{
+            ctx.json(mapper.writeValueAsString(delete_message_by_id));
+        }
     }
 
-    private void updateMessagebyId(Context ctx)
-    {
-        
-    }
+    private void updateMessagebyId(Context ctx) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Message message = mapper.readValue(ctx.body(), Message.class);
+        int message_id = Integer.parseInt(ctx.pathParam("message_id"));
+        Message updatedMessage = messageservice.updateMessage(message_id, message);
+        System.out.println(updatedMessage);
+        if(updatedMessage == null){
+            ctx.status(400);
+        }else{
+            ctx.json(mapper.writeValueAsString(updatedMessage));
+        }
 
-    private void getAllMessagesbyAccountId(Context ctx)
+    }
+    
+    private void getAllMessagesbyAccountId(Context ctx) throws JsonProcessingException
     {
-        
+        int user_id = Integer.parseInt(ctx.pathParam("posted_by"));
+        ctx.json(messageservice.getAllMessagesbyAccount(user_id));
     }
 
 

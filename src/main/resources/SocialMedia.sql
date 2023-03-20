@@ -1,12 +1,12 @@
 drop table if exists message;
 drop table if exists account;
 create table account (
-    account_id int primary key auto_increment,
+    account_id int primary key AUTO_INCREMENT,
     username varchar(255) unique,
     password varchar(255)
 );
 create table message (
-    message_id int primary key auto_increment,
+    message_id int primary key AUTO_INCREMENT,
     posted_by int,
     message_text varchar(255),
     time_posted_epoch bigint,

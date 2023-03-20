@@ -46,8 +46,10 @@ public class MessageDAO {
           preparedStatement.executeUpdate();
           ResultSet pkeyResultSet = preparedStatement.getGeneratedKeys();
           if(pkeyResultSet.next()){
-              // int generated_message_id = (int) pkeyResultSet.getLong(1); only need if the Message.java file didn't create the message_id for us.
-              return new Message(message.getPosted_by(), message.getMessage_text(), message.getTime_posted_epoch());
+            int generated_message_id = (int) pkeyResultSet.getLong(1);
+            message.setMessage_id(generated_message_id);
+            System.out.println(new Message(message.getMessage_id(), message.getPosted_by(), message.getMessage_text(), message.getTime_posted_epoch()));
+            return new Message(message.getMessage_id(), message.getPosted_by(), message.getMessage_text(), message.getTime_posted_epoch());
           }
       }catch(SQLException e){
           System.out.println(e.getMessage());
@@ -119,6 +121,8 @@ public class MessageDAO {
       }
       return null;
   }
+
+
 // posibily change parameter below to int id
    public Message deleteMessageById(int id){ 
       Connection connection = ConnectionUtil.getConnection();
@@ -131,6 +135,7 @@ public class MessageDAO {
 
          //write preparedStatement's setString and setInt methods here.
          preparedStatement.setInt(1,id);
+         
 
          ResultSet rs = preparedStatement.executeQuery();
          while(rs.next()){
@@ -139,36 +144,88 @@ public class MessageDAO {
             return message_by_id;
          }
       }catch(SQLException e){
-         System.out.println(e.getMessage());
+        System.out.println(e.getMessage());
       }
       return null;
    }
 
-   public void updateMessage(int id, Message message){
-      Connection connection = ConnectionUtil.getConnection();
-      try {
-          //Write SQL logic here
+
+
+
+
+
+   public List<Message> updateMessage(int id, String message){
+    Connection connection = ConnectionUtil.getConnection();
+    List<Message> messages = new ArrayList<>();
+    try {
+        //Write SQL logic here
+        String sql = "UPDATE message SET message_text =? WHERE message_id = ?;";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+        //int posted_by = message.getPosted_by();
+        //String message_text = message.getMessage_text();
+        //long time_posted = message.getTime_posted_epoch();
+
+
+        preparedStatement.setInt(2,id);
+        //preparedStatement.setInt(1,posted_by);
+        preparedStatement.setString(1,message);
+        //preparedStatement.setLong(3,time_posted);
+        System.out.println(preparedStatement);
+
+        //PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ResultSet rs = preparedStatement.executeQuery();
+        while(rs.next()){
+            Message message1 = new Message(rs.getInt("message_id"), rs.getInt("posted_by"),
+                    rs.getString("message_text"), rs.getLong("time_posted_epoch"));
+            messages.add(message1);
+            System.out.println(message1);
+        }
+    }catch(SQLException e){
+        System.out.println(e.getMessage());
+    }
+    return messages;
+}
+
+//    public void updateMessage(int id, Message message){
+//       Connection connection = ConnectionUtil.getConnection();
+//       try {
+//           //Write SQL logic here
           
-          String sql = "UPDATE message SET posted_by =?, message_text =?, time_posted_epoch =? WHERE message_id = ?;";
-          PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//           String sql = "UPDATE message SET posted_by =?, message_text =?, time_posted_epoch =? WHERE message_id = ?;";
+//           PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
-          //write PreparedStatement setString and setInt methods here.
-          int posted_by = message.getPosted_by();
-          String message_text = message.getMessage_text();
-          long time_posted = message.getTime_posted_epoch();
+//           //write PreparedStatement setString and setInt methods here.
 
-
-          preparedStatement.setInt(4,id);
-          preparedStatement.setInt(1,posted_by);
-          preparedStatement.setString(2,message_text);
-          preparedStatement.setLong(3,time_posted);
+        //   int posted_by = message.getPosted_by();
+        //   String message_text = message.getMessage_text();
+        //   long time_posted = message.getTime_posted_epoch();
 
 
-          preparedStatement.executeUpdate();
-      }catch(SQLException e){
-          System.out.println(e.getMessage());
-      }
-  }
+        //   preparedStatement.setInt(4,id);
+        //   preparedStatement.setInt(1,posted_by);
+        //   preparedStatement.setString(2,message_text);
+        //   preparedStatement.setLong(3,time_posted);
+
+//         //   ResultSet rs = preparedStatement.executeQuery();
+//         //     while(rs.next()){
+//         //         String generated_message = (String) rs.getString(1);
+//         //         message.setMessage_text(generated_message);
+//         //         message = new Message(rs.getInt("message_id"), rs.getInt("posted_by"), rs.getString("message_text"),
+//         //                 rs.getLong("time_posted_epoch"));
+//         //         return message;
+//         //     }
+
+
+//           preparedStatement.executeUpdate();
+//       }catch(SQLException e){
+//           System.out.println(e.getMessage());
+//       }
+//   }
+
+
+
+
 
   public List<Message> getAllMessagesbyUser(int id){
    Connection connection = ConnectionUtil.getConnection();

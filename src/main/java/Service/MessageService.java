@@ -56,6 +56,7 @@ public class MessageService {
         return messageDAO.getMessageById(message_id);
     }
 
+    // delete message by id
     public Message deleteMessage(int message_id){
         return messageDAO.deleteMessageById(message_id);
     }
@@ -73,7 +74,7 @@ public class MessageService {
      *         unsuccessful. We do this to inform our application about successful/unsuccessful operations. (eg, the
      *         user should have some insight if they attempted to edit a nonexistent flight.)
      */
-    public Message updateMessage(int message_id, Message message){
+    public Message updateMessage(int message_id, String message){
         if (Objects.isNull(messageDAO.getMessageById(message_id)))
         {
             return null;

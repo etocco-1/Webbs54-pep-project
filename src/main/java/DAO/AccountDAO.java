@@ -42,7 +42,7 @@ public class AccountDAO {
 //          automatically generate a primary key.
             String sql = "INSERT INTO account (username, password) VALUES (?,?);";
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            System.out.println(preparedStatement);
+            //System.out.println(preparedStatement);
 
             // write preparedStatement's setString method here.
             //int int1_account_id = account.getAccount_id();
@@ -53,17 +53,17 @@ public class AccountDAO {
             //preparedStatement.setInt(1, int1_account_id);
             preparedStatement.setString(1, str1_username);
             preparedStatement.setString(2, str2_password);
-            System.out.println(preparedStatement);
+            //System.out.println(preparedStatement);
 
 
             preparedStatement.executeUpdate();
-            System.out.println(preparedStatement);
+            //System.out.println(preparedStatement);
             ResultSet pkeyResultSet = preparedStatement.getGeneratedKeys();
-            System.out.println(preparedStatement);
+            //ystem.out.println(preparedStatement);
             if(pkeyResultSet.next()){
                 int generated_account_id = (int) pkeyResultSet.getLong(1);
                 account.setAccount_id(generated_account_id);
-                System.out.println(new Account(account.getAccount_id(), account.getUsername(), account.getPassword()));
+                //System.out.println(new Account(account.getAccount_id(), account.getUsername(), account.getPassword()));
                 return new Account(account.getAccount_id(), account.getUsername(), account.getPassword());
             }
         }catch(SQLException e){

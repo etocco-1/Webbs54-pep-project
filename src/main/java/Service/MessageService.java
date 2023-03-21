@@ -57,9 +57,22 @@ public class MessageService {
     }
 
     // delete message by id
-    public Message deleteMessage(int message_id){
-        return messageDAO.deleteMessageById(message_id);
+    public Message deleteMessage(Message message){
+        try {
+            return messageDAO.deleteMessageById(message);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
     }
+    // public Message deleteMessage(int message_id){
+    //     if (messageDAO.getMessageById(message_id) != null)
+    //     {
+    //         return messageDAO.deleteMessageById(message_id);
+    //     }
+    //     return null;
+    // }
     
     /**
     * TODO: Use the FlightDAO to update an existing flight from the database.

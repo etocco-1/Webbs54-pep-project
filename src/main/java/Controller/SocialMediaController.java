@@ -81,28 +81,8 @@ public class SocialMediaController {
             ctx.json(mapper.writeValueAsString(addedAccount));
         }
 
-        // // Check if the username is blank
-        // if (account.getPassword().trim().isEmpty()) {
-        //     ctx.status(401);
-        //     ctx.result("Passwornd is Empty!");
-        //     return;
-        // }
-    
-        // Account addedAccount = accountservice.addAccount(account);
-        // if (addedAccount == null) {
-        //     ctx.status(200);
-        // } else {
-        //     ctx.json(mapper.writeValueAsString(addedAccount));
-        // }
     }
-    
-    
 
-   
-    
-    
-    
-    
 
     private void postUserLogins(Context ctx) throws JsonProcessingException
 {
@@ -153,108 +133,32 @@ public class SocialMediaController {
         ctx.json(messageservice.getAllMessages());
     }
 
-    // private void getMessageById(Context ctx){
-    //     // ctx.json(messageservice.retrieveMessage(ctx.pathParam("message_id")));
-    //     ctx.json(messageservice.retrieveMessage());
-    // }
-
-    // private void getMessageById(Context ctx) throws JsonProcessingException {
-    //     ObjectMapper mapper = new ObjectMapper();
-    //     Message message = mapper.readValue(ctx.body(), Message.class);
-    //     Message message_by_id = messageservice.retrieveMessage(message);
-    //     if(message_by_id!=null){
-    //         ctx.json(mapper.writeValueAsString(message_by_id));
-    //     }else{
-    //         ctx.status(400);
-    //     }
-    // }
-
-    private void getMessageById(Context ctx) throws JsonProcessingException {
-        // ObjectMapper mapper = new ObjectMapper();
-        // Message message = mapper.readValue(ctx.body(), Message.class);
-        // int message_id = Integer.parseInt(ctx.pathParam("message_id"));
-        // Message getMessagebyId = messageservice.retrieveMessage(message_id);
-        // System.out.println(getMessagebyId);
-    
-        // if(getMessagebyId == null){
-        //     ctx.status(400);
-        // }else{
-        //     ctx.json(mapper.writeValueAsString(getMessagebyId));
-        // }
-
-        ObjectMapper mapper = new ObjectMapper();
-        Message message = mapper.readValue(ctx.body(), Message.class);
+    private void getMessageById(Context ctx) {
         int message_id = Integer.parseInt(ctx.pathParam("message_id"));
-        // Message deletedMessage = messageservice.deleteMessage(message_id);
+        Message getMessageById = messageservice.retrieveMessage(message_id);
+    
+        if (getMessageById == null) {
+            ctx.status(200); // Return 200 if the message is not found
+            ctx.result(""); // Return an empty response body
+        } else {
+            ctx.json(getMessageById);
+        }
+    }
+ 
 
-        Message deletedMessage = messageservice.retrieveMessage(message_id);
+    public void deleteMessagebyId(Context ctx) {
+        int message_id = Integer.parseInt(ctx.pathParam("message_id"));
+        Message deletedMessage = messageservice.deleteMessage(message_id);
+    
         if (deletedMessage != null) {
             ctx.json(deletedMessage);
         } else {
-            ctx.result("Failed to retrieve message with ID: " + message_id);
-            ctx.status(200);
+            ctx.status(200); // Return 200 if the message is not found
+            ctx.result(""); // Return an empty response body
         }
     }
     
-
-
-    // private void deleteMessagebyId(Context ctx) throws JsonProcessingException
-    // {
-    //     ObjectMapper mapper = new ObjectMapper();
-    //     Message message = mapper.readValue(ctx.body(), Message.class);
-    //     int message_id = Integer.parseInt(ctx.pathParam("message_id"));
-    //     Message delete_message_by_id = messageservice.deleteMessage(message_id);
-    //     if(delete_message_by_id!=null){
-    //         ctx.json(mapper.writeValueAsString(delete_message_by_id));
-    //     }
-    //     else
-    //     {
-    //         ctx.status(200);
-    //     }
-        
-    // }
-
-    public void deleteMessagebyId(Context ctx) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        Message message = mapper.readValue(ctx.body(), Message.class);
-        int message_id = Integer.parseInt(ctx.pathParam("message_id"));
-        // Message deletedMessage = messageservice.deleteMessage(message_id);
-
-        Message deletedMessage = messageservice.deleteMessage(message);
-        if (deletedMessage != null) {
-            ctx.json(deletedMessage);
-        } else {
-            ctx.result("Failed to delete message with ID: " + message_id);
-            ctx.status(200);
-        }
-    }
-
-    // private void deleteMessagebyId(Context ctx) throws JsonProcessingException {
-    //     ObjectMapper mapper = new ObjectMapper();
-    //     int message_id = Integer.parseInt(ctx.pathParam("message_id"));
-    //     Message delete_message_by_id = messageservice.deleteMessage(message_id);
-    //     if(delete_message_by_id != null) {
-    //         ctx.json(mapper.writeValueAsString(delete_message_by_id));
-    //     } else {
-    //         ctx.status(200);
-    //     }
-    // }
-    
-
-    // private void updateMessagebyId(Context ctx) throws JsonProcessingException {
-    //     ObjectMapper mapper = new ObjectMapper();
-    //     Message message = mapper.readValue(ctx.body(), Message.class);
-    //     int message_id = Integer.parseInt(ctx.pathParam("message_id"));
-    //     String message_t = ctx.pathParam("message_text");
-    //     Message updatedMessage = messageservice.updateMessage(message_id, message_t);
-    //     System.out.println(updatedMessage);
-    //     if(updatedMessage == null){
-    //         ctx.status(400);
-    //     }else{
-    //         ctx.json(mapper.writeValueAsString(updatedMessage));
-    //     }
-
-    // }
+   
 
     private void updateMessagebyId(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();

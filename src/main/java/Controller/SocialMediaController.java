@@ -48,7 +48,7 @@ public class SocialMediaController {
             this.messageservice = new MessageService();
         }
     /**
-     * Method defines the structure of the Javalin Flights API. Javalin methods will use handler methods
+     * Method defines the structure of the Javalin SocialMedia API. Javalin methods will use handler methods
      * to manipulate the Context object, which is a special object provided by Javalin which contains information about
      * HTTP requests and can generate responses.
      */

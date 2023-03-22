@@ -37,16 +37,18 @@ public class AccountService {
         this.accountDAO = accountDAO;
     }
     /**
-     * TODO: Use the AccountDAO to persist an account. The given Account will not have an id provided.
-     *
      * @param account an account object.
      * @return The persisted account if the persistence is successful.
      */
-
     public Account addAccount(Account account) {
         return accountDAO.insertAccount(account);
     }
-
+    
+    /**
+     * 
+     * @param account an account object.
+     * @return The account if the login is successful.
+     */
     public Account logintoAccount(Account account) {
         return accountDAO.checkAccount(account);
     }
